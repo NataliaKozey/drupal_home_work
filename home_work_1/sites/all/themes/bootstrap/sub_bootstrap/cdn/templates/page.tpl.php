@@ -119,26 +119,26 @@
   <div class = 'primary col-sm-6'>
     <?php print render($page['primary']) ?>
   </div>
-  </br>
+  
 <?php endif; ?>
 <?php if ($page['right_top_menu']): ?>
   <div class = 'right_top_menu col-sm-6'>
     <?php print render($page['right_top_menu']) ?>
   </div>
-  </br>
+  
 <?php endif; ?>
 <?php if ($page['secondary']): ?>
   <div class = 'secondary col-sm-6'>
     <?php print render($page['secondary']) ?>
   </div>
-  </br>
+ 
 <?php endif; ?>
 <?php if ($page['content']): ?>
   <div class = 'content col-sm-6'>
     <?php print render($page['content']) ?>
     
   </div>
-  </br>
+ 
 <?php endif; ?>
 
 
