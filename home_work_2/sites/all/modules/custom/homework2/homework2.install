@@ -1,0 +1,35 @@
+<?php 
+    function homework2_schema(){
+        $schema = array(); 
+
+       
+        $schema['homework2'] = array(
+            'description' => 'Table homework2',
+            'fields' => array(
+                'id' => array(
+                    'type' => 'serial',
+                    'unsignet' => TRUE,
+                    'not null' => TRUE,
+                ),
+                'name' => array(
+                    'type' => 'varchar',
+                    'length' => 25,
+                    'default' => '',
+                ),
+                'message' => array(
+                    'type' => 'varchar',
+                    'length' => 200,
+                    'default' => '',
+                ),
+            ),
+            'primary key' => array('id'), 
+        );
+
+        return $schema;
+    }
+
+    function homework2_install(){
+        drupal_install_schema('homework2');
+    }
+
+?>

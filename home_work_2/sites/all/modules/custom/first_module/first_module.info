@@ -1,0 +1,4 @@
+name = First Module
+description = first custom module
+package = Custom
+core = 7.x

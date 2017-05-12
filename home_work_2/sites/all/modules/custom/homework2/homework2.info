@@ -1,0 +1,4 @@
+name = homework2
+description = homework 2
+package = Custom
+core = 7.x

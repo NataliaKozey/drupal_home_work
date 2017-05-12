@@ -1,0 +1,153 @@
+<?php 
+   function homework2_init() {
+        drupal_add_library('system', 'jquery.ui');
+        drupal_add_js(drupal_get_path('module', 'homework2') . '/js/homework2.js');
+        drupal_add_css(drupal_get_path('module', 'homework2') . '/js/homework2.ccs');
+    }
+
+function homework2_menu(){
+        $items = array();
+        $items['homework2'] = array(
+            'title' => t('homework2'),
+            'page callback' => 'drupal_get_form',
+            'page arguments' => array('homework2_message_form'),
+            'type' => MENU_NORMAL_ITEM,
+            'menu_name' => 'main-menu',
+            'access callback' => TRUE,
+            );
+        $items['admin/content/messages'] = array(
+        'title' => 'Message',
+        'page callback' => 'homework2_message_list_page',
+           'page arguments' => array(1),
+   'access arguments' => array('access content'),
+   'type' => MENU_CALLBACK, 
+        );
+        return $items;
+
+    }
+ 
+
+
+
+    function homework2_message_form() {
+        $form = array();
+        $form['name'] = array(
+            '#type' => 'textfield',
+            '#title' => t('Name'),
+            '#attributes' => array(
+                'placeholder' => 'Enter name',
+                'id' => "name_field_value",
+                ),
+            );
+        $form['message'] = array(
+            '#type' => 'textarea',
+            '#title' => t('Message'),
+            '#attributes' => array(
+                'placeholder' => 'Enter message',
+                'id' => "message_field_value",
+                ),
+            );
+        $form['submit'] = array(
+            '#type' => 'submit',
+            '#value' => t('Submit'),
+            '#attributes' => array(
+                'class' => array('btn btn-primary col-md-12'),
+                ),
+            '#ajax' => array(
+                'callback' => 'homework2_message_form_ajax_submit', 
+                'effect' => 'fade',
+                ),
+            );
+        return $form;
+
+    }
+ 
+
+    function homework2_message_form_validate($form, &$form_state) {
+       if (strlen($form_state['values']['name'])<3) {
+          form_set_error('name', t('Name is short'));
+        }
+
+  }
+
+    function homework2_message_form_submit($form, &$form_state){
+        $q = db_insert('homework2'); 
+    $q->fields(
+        array(
+            'name' => $form_state['values']['name'],
+            'message' => $form_state['values']['message'],
+        )
+    );
+    
+    $res = $q->execute();
+
+   
+    if ($res) {
+        drupal_set_message('Data is send','status');
+    }
+    else {
+        drupal_set_message('Error','error');
+    }
+         
+    }
+ function homework2_message_list_page(){
+     $content = t("List for homework2<br /><br />");
+   $result = db_query('SELECT * FROM homework2');
+  //  $content .= "<ul>";  while ($contact = db_fetch_object($result)) {
+  //  $content .= "<li>$contact->name,
+  //  $contact->message,
+  // </li>";
+  
+  //  }
+  //  $content .= "</ul>";
+ 
+  //  return $content; 
+   return $result;
+  }
+  function homework2_message_form_ajax_submit($form, &$form_state) {
+        $commands = array();
+        $commands[] = ajax_command_remove('#message_send');
+        $commands[] = ajax_command_before('#' . $form['#id'],  '<div id="message_send" class="alert alert-success">' . '"' . $form_state['values']['name'] . '" success send "' . $form_state['values']['message'] . '" message.' . '</div>');
+
+        $commands[] = ajax_command_invoke('#name_field_value', 'val', array(''));
+
+        $commands[] = ajax_command_invoke('#message_field_value', 'val', array(''));
+        $commands[] = homework_ajax_command_page_reload();
+
+
+        return array (
+         '#type' => 'ajax',
+         '#commands' => $commands,
+         );
+    }
+
+//     function homework2_ajax_command_page_reload() {
+//         return array(
+//             'command' => 'page_reload',
+//             );
+//     }
+
+//     function homework2_block_info() {
+ 
+//     $blocks['homework2'] = array(
+//         'info' => t('Homework2'),
+//         'cache' => DRUPAL_NO_CACHE
+//     );
+//     return $blocks;
+//   }
+//     function homework2_block_view($delta = '') {
+ 
+//       $block = array();
+
+//       switch ($delta) {
+//         case 'homework2':
+//           $block['subject'] = t('Homework 2');
+//           $block['content'] = drupal_get_form(homework2_message_form()
+//             );
+          
+//           break;
+
+//       }
+//       return $block;
+//     }
+// ?>
